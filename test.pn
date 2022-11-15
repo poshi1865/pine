@@ -1,4 +1,3 @@
-
 int a = input();
 int b = input();
 

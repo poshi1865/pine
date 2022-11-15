@@ -1,6 +1,8 @@
 #ifndef LEXER_H
 #define LEXER_H
 
+#include "commons.h"
+
 typedef enum {
     TK_IDENT, //Identifiers
     TK_PUNCT, //Punctuation
@@ -15,7 +17,11 @@ struct Token {
     char* value; 
 };
 
-void print_tokens();
+void print_tokens(FILE* source_file);
+
+char get_next_char(FILE* source_file); 
+
+void retract();
 
 #endif
 

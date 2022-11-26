@@ -20,6 +20,7 @@ int main(int argc, char** argv) {
     
     struct Token t;
     while ((t = get_next_token(source_file)).type != TOKEN_EOF) {
+        printf("Token value: %s\n", t.value);
     }
 
     //close the file

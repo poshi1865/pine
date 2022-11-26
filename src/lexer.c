@@ -64,7 +64,6 @@ struct Token get_next_token(FILE* source_file) {
                     token.type = TOKEN_PUNCT;
                     strcpy(token.value, ch_converted_to_string);
 
-                    //printf("Token %d: %s\n", no_of_tokens, ch_converted_to_string);
                     state = 0;
 
                     return token;
@@ -84,7 +83,6 @@ struct Token get_next_token(FILE* source_file) {
                     token.type = TOKEN_OPERATOR;
                     strcpy(token.value, ch_converted_to_string);
 
-                    //printf("Token %d: %s\n", no_of_tokens, ch_converted_to_string);
                     return token;
                 }
 
@@ -97,7 +95,7 @@ struct Token get_next_token(FILE* source_file) {
 
                 else {
                     printf("First character of file is not a letter");
-                    exit(0);
+                    exit(1);
                 }
                 break;
 
@@ -115,12 +113,6 @@ struct Token get_next_token(FILE* source_file) {
                     token.type = TOKEN_IDENT;
                     strcpy(token.value, token_buffer);
 
-                    //printf("Token %d: %s\n", no_of_tokens, token.value);
-
-
-                    //Reset token_buffer and token_buffer_pointer
-                    for (int x = 0; x < 100; x++) token_buffer[x] = '\0';
-                    token_buffer_pointer = 0;
 
                     state = 0;
                     
@@ -177,11 +169,6 @@ struct Token get_next_token(FILE* source_file) {
                 no_of_tokens++;
                 token.type = TOKEN_OPERATOR;
                 strcpy(token.value, token_buffer);
-                //printf("Token %d: %s\n", no_of_tokens, token.value);
-
-                //Reset token buffer
-                for (int x = 0; x < 100; x++) token_buffer[x] = '\0';
-                token_buffer_pointer = 0;
 
                 state = 0;
                 return token;
@@ -199,11 +186,6 @@ struct Token get_next_token(FILE* source_file) {
                     no_of_tokens++;
                     token.type = TOKEN_NUM;
                     strcpy(token.value, token_buffer);
-                    //printf("Token %d: %s\n", no_of_tokens, token.value);
-
-                    //Reset token_buffer and token_buffer_pointer
-                    for (int x = 0; x < 100; x++) token_buffer[x] = '\0';
-                    token_buffer_pointer = 0;
 
                     state = 0;
                     return token;

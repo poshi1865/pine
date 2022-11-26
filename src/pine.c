@@ -1,7 +1,6 @@
 #include "commons.h"
 #include "lexer.h"
 
-
 int main(int argc, char** argv) {
     //For now we can pass in only 1 input file to the compiler
     if (argc < 2) {
@@ -19,9 +18,12 @@ int main(int argc, char** argv) {
     }
     
     struct Token t;
+    int c = 0;
     while ((t = get_next_token(source_file)).type != TOKEN_EOF) {
-        printf("Token value: %s\n", t.value);
+        printf("Token:  %s\n", t.value);
+        c++;
     }
+    printf("%d\n", c);
 
     //close the file
     fclose(source_file);

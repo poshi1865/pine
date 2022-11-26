@@ -29,5 +29,7 @@ char get_next_char(FILE* source_file);
 
 void retract();
 
+bool is_keyword(char* st);
+
 #endif
 

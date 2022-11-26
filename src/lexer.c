@@ -33,6 +33,17 @@ void retract() {
     inp_ptr--;
 }
 
+bool is_keyword(char* st) {
+    const int number_of_keywords = 6;
+    const int max_size_of_keyword = 10;
+    //TODO: fix the warning caused by the below line
+    char keywords[number_of_keywords][max_size_of_keyword] = {"int", "print", "if", "else", "while", "for"};
+    for (int i = 0; i < number_of_keywords; i++) {
+        if (strcmp(keywords[i], st) == 0) return true; 
+    }
+    return false;
+}
+
 struct Token get_next_token(FILE* source_file) {
     struct Token token;
     int token_buffer_pointer = 0;
@@ -43,6 +54,8 @@ struct Token get_next_token(FILE* source_file) {
     char ch;
     while (ch != EOF) {
         switch (state) {
+
+            //Start state
             case 0:
                 ch = get_next_char(source_file);
 
@@ -53,8 +66,11 @@ struct Token get_next_token(FILE* source_file) {
                 else if (ch == ' ' || ch == '\t' || ch == '\n') {
                     state = 0;
                 }
-                else if (ch == '(' || ch == '{' || ch == '}' || ch == ')' || ch == ';'
-                        || ch == '"') {
+                //strings
+                else if (ch == '"') {
+                    state = 4;
+                }
+                else if (ch == '(' || ch == '{' || ch == '}' || ch == ')' || ch == ';') {
                     no_of_tokens++;
 
                     char ch_converted_to_string[2] = "\0";
@@ -106,12 +122,18 @@ struct Token get_next_token(FILE* source_file) {
                     state = 1;
                     token_buffer[token_buffer_pointer++] = ch;
                 }
+
                 else if (token_buffer[0] != '\0'){
                     retract();
                     no_of_tokens++;
 
-                    token.type = TOKEN_IDENT;
                     strcpy(token.value, token_buffer);
+                    if (is_keyword(token.value)) {
+                        token.type = TOKEN_KEYWORD;
+                    }
+                    else {
+                        token.type = TOKEN_IDENT;
+                    }
 
 
                     state = 0;
@@ -189,6 +211,23 @@ struct Token get_next_token(FILE* source_file) {
 
                     state = 0;
                     return token;
+                }
+                break;
+
+            //Strings
+            case 4:
+                ch = get_next_char(source_file);
+                if (ch == '"') {
+                    no_of_tokens++;
+                    token.type = TOKEN_STR;
+                    strcpy(token.value, token_buffer);
+
+                    state = 0;
+                    return token;
+                }
+                else {
+                    state = 4;
+                    token_buffer[token_buffer_pointer++] = ch;
                 }
                 break;
 

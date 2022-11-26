@@ -1,5 +1,5 @@
-int a = input();
-int b = input();
+int a = 20;
+int b = 10;
 
 int c = a + b;
 print(c);

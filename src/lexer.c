@@ -10,9 +10,13 @@
 #include "commons.h"
 #include "lexer.h"
 
-static char input_buffer[1000];
+#define INPUT_BUFFER_SIZE 100000
+
+static char input_buffer[INPUT_BUFFER_SIZE];
 static int inp_ptr = 0;
 static int input_buffer_size = 0;
+
+struct Token token;
 
 int no_of_tokens = 0;
 
@@ -31,7 +35,7 @@ void retract() {
     inp_ptr--;
 }
 
-void print_tokens(FILE* source_file) {
+struct Token get_next_token(FILE* source_file) {
     int token_buffer_pointer = 0;
 
     char token_buffer[100] = {'\0'};
@@ -53,8 +57,19 @@ void print_tokens(FILE* source_file) {
                 else if (ch == '(' || ch == '{' || ch == '}' || ch == ')' || ch == ';'
                         || ch == '"') {
                     no_of_tokens++;
-                    printf("Token %d: %c\n", no_of_tokens, ch);
+
+                    char ch_converted_to_string[2] = "\0";
+                    ch_converted_to_string[0] = ch; //convert ch to a string
+
+                    //create a new token
+                    token.type = TOKEN_PUNCT;
+                    strcpy(token.value, ch_converted_to_string);
+
+                    printf("Token %d: %s\n", no_of_tokens, ch_converted_to_string);
                     state = 0;
+
+                    return token;
+
                 }
 
                 else if (ch == '>' || ch == '<' || ch == '=' || ch == '!') {
@@ -63,7 +78,15 @@ void print_tokens(FILE* source_file) {
 
                 else if (ch == '+' || ch == '-' || ch == '/' || ch == '*' || ch == '%') {
                     no_of_tokens++;
-                    printf("Token %d: %c\n", no_of_tokens, ch);
+
+                    char ch_converted_to_string[2] = "\0";
+                    ch_converted_to_string[0] = ch; //convert ch to a string
+                                                    
+                    token.type = TOKEN_OPERATOR;
+                    strcpy(token.value, ch_converted_to_string);
+
+                    printf("Token %d: %s\n", no_of_tokens, ch_converted_to_string);
+                    return token;
                 }
 
                 else if (isdigit(ch)) {
@@ -89,13 +112,20 @@ void print_tokens(FILE* source_file) {
                 else if (token_buffer[0] != '\0'){
                     retract();
                     no_of_tokens++;
-                    printf("Token %d: %s\n", no_of_tokens, token_buffer);
+
+                    token.type = TOKEN_IDENT;
+                    strcpy(token.value, token_buffer);
+
+                    printf("Token %d: %s\n", no_of_tokens, token.value);
+
 
                     //Reset token_buffer and token_buffer_pointer
                     for (int x = 0; x < 100; x++) token_buffer[x] = '\0';
                     token_buffer_pointer = 0;
 
                     state = 0;
+                    
+                    return token;
                 }
                 break;
 
@@ -146,13 +176,16 @@ void print_tokens(FILE* source_file) {
                     }
                 }
                 no_of_tokens++;
-                printf("Token %d: %s\n", no_of_tokens, token_buffer);
+                token.type = TOKEN_OPERATOR;
+                strcpy(token.value, token_buffer);
+                printf("Token %d: %s\n", no_of_tokens, token.value);
 
                 //Reset token buffer
                 for (int x = 0; x < 100; x++) token_buffer[x] = '\0';
                 token_buffer_pointer = 0;
 
                 state = 0;
+                return token;
                 break;
 
             //Numbers
@@ -165,13 +198,16 @@ void print_tokens(FILE* source_file) {
                 else if (token_buffer[0] != '\0'){
                     retract();
                     no_of_tokens++;
-                    printf("Token %d: %s\n", no_of_tokens, token_buffer);
+                    token.type = TOKEN_NUM;
+                    strcpy(token.value, token_buffer);
+                    printf("Token %d: %s\n", no_of_tokens, token.value);
 
                     //Reset token_buffer and token_buffer_pointer
                     for (int x = 0; x < 100; x++) token_buffer[x] = '\0';
                     token_buffer_pointer = 0;
 
                     state = 0;
+                    return token;
                 }
                 break;
 
@@ -180,4 +216,6 @@ void print_tokens(FILE* source_file) {
                 break;
         }
     }
+    token.type = TOKEN_EOF;
+    return token;
 }

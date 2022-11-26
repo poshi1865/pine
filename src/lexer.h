@@ -4,20 +4,26 @@
 #include "commons.h"
 
 typedef enum {
-    TK_IDENT, //Identifiers
-    TK_PUNCT, //Punctuation
-    TK_KEYWORD, //Keywords
-    TK_STR, //String literals
-    TK_NUM, //Numeric literals
-    TK_EOF, //End of file
+    TOKEN_HEAD, //This will be assigned to only one token which will point to the head of the token_stream
+    TOKEN_IDENT, //Identifiers
+    TOKEN_PUNCT, //Punctuation
+    TOKEN_KEYWORD, //Keywords
+    TOKEN_STR, //String literals
+    TOKEN_NUM, //Numeric literals
+    TOKEN_EOF, //End of file
+    TOKEN_OPERATOR //Operators
 } TokenType;
 
 struct Token {
     TokenType type;
-    char* value; 
+    char value[100]; 
+    struct Token* next_token;
 };
 
-void print_tokens(FILE* source_file);
+
+void init_token_stream();
+
+struct Token get_next_token(FILE* source_file);
 
 char get_next_char(FILE* source_file); 
 

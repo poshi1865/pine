@@ -18,7 +18,9 @@ int main(int argc, char** argv) {
         exit(1);
     }
     
-    print_tokens(source_file);
+    struct Token t;
+    while ((t = get_next_token(source_file)).type != TOKEN_EOF) {
+    }
 
     //close the file
     fclose(source_file);

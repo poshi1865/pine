@@ -6,10 +6,10 @@
     3. Only if/else if/else and while loops
     4. print statement will be inbuilt
 
-    I want to be able to compile this:
+    I want to be able to compile this for now:
         
-        int a = input();
-        int b = input();
+        int a = 10;
+        int b = 20;
 
         int c = a + b;
         print(c);

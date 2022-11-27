@@ -4,7 +4,6 @@
 #include "commons.h"
 
 typedef enum {
-    TOKEN_HEAD, //This will be assigned to only one token which will point to the head of the token_stream
     TOKEN_IDENT, //Identifiers
     TOKEN_PUNCT, //Punctuation
     TOKEN_KEYWORD, //Keywords

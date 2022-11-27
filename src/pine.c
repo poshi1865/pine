@@ -2,14 +2,13 @@
 #include "lexer.h"
 
 char* translate(int n) {
-    if (n == 0) return "TOKEN_HEAD";
-    if (n == 1) return "TOKEN_IDENT";
-    if (n == 2) return "TOKEN_PUNCT";
-    if (n == 3) return "TOKEN_KEYWORD";
-    if (n == 4) return "TOKEN_STR";
-    if (n == 5) return "TOKEN_NUM";
-    if (n == 6) return "TOKEN_EOF";
-    if (n == 7) return "TOKEN_OPERATOR";
+    if (n == 0) return "TOKEN_IDENT";
+    if (n == 1) return "TOKEN_PUNCT";
+    if (n == 2) return "TOKEN_KEYWORD";
+    if (n == 3) return "TOKEN_STR";
+    if (n == 4) return "TOKEN_NUM";
+    if (n == 5) return "TOKEN_EOF";
+    if (n == 6) return "TOKEN_OPERATOR";
     return "UNDEFINED";
 }
 
@@ -36,7 +35,7 @@ int main(int argc, char** argv) {
         printf("Type: %s\n", translate(t.type));
         c++;
     }
-    printf("%d\n", c);
+    printf("Total number of tokens: %d\n", c);
 
     //close the file
     fclose(source_file);

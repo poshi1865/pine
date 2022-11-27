@@ -1,8 +1,6 @@
 /* Lexical Analysis is the first phase of compilation.
- * The Lexer does the task of taking in a pine source file as input and outputs tokens
- * The lexer will be called by the parser as a subroutine each time a token is needed
- *
- * There are 4 kinds of tokens: Keyword, Identifier, Constant (123, 12.45, 1.2E3), Sign ('(', '<' , "<=" etc)
+ * The Lexer does the task of taking in a pine source file as input and scans it for tokens
+ * The lexer will be called by the parser as a subroutine each time a token is needed through the get_next_token() function
  *
  * The Token struct is defined in the lexer.h header file
  * */ 
@@ -36,8 +34,10 @@ void retract() {
 bool is_keyword(char* st) {
     const int number_of_keywords = 6;
     const int max_size_of_keyword = 10;
-    //TODO: fix the warning caused by the below line
-    char keywords[number_of_keywords][max_size_of_keyword] = {"int", "print", "if", "else", "while", "for"};
+
+    //TODO: fix the warning caused by the line below
+    char keywords[number_of_keywords][max_size_of_keyword] = {"int", "print", "if",
+                                                              "else", "while", "for"};
     for (int i = 0; i < number_of_keywords; i++) {
         if (strcmp(keywords[i], st) == 0) return true; 
     }
@@ -58,7 +58,6 @@ struct Token get_next_token(FILE* source_file) {
             //Start state
             case 0:
                 ch = get_next_char(source_file);
-
                 if (isalpha(ch)) {
                     state = 1;
                     token_buffer[token_buffer_pointer++] = ch;
